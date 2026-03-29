@@ -6,16 +6,15 @@ document.getElementById('newTabSound').addEventListener('change', saveSettings);
 document.getElementById('closeTabSound').addEventListener('change', saveSettings);
 
 // Play preview buttons
-document.getElementById('playNewTab').addEventListener('click', () => playPreview('new_tab_sounds'));
-document.getElementById('playCloseTab').addEventListener('click', () => playPreview('closed_tab_sounds'));
+document.getElementById('playNewTab').addEventListener('click', () => playPreview('newTabSound'));
+document.getElementById('playCloseTab').addEventListener('click', () => playPreview('closeTabSound'));
 
 async function loadSounds() {
     try {
-        // Fetch available sounds
-        const newTabSounds = await fetchSoundsInFolder('new_tab_sounds');
-        const closeTabSounds = await fetchSoundsInFolder('closed_tab_sounds');
+        // Hardcoded sounds
+        const newTabSounds = ['sound1.mp3'];
+        const closeTabSounds = ['sound2.mp3'];
 
-        // Populate dropdowns
         populateSelect('newTabSound', newTabSounds);
         populateSelect('closeTabSound', closeTabSounds);
 
@@ -23,9 +22,14 @@ async function loadSounds() {
         chrome.storage.sync.get(['newTabSound', 'closeTabSound'], (result) => {
             if (result.newTabSound) {
                 document.getElementById('newTabSound').value = result.newTabSound;
+            } else {
+                document.getElementById('newTabSound').value = 'sound1.mp3';
             }
+            
             if (result.closeTabSound) {
                 document.getElementById('closeTabSound').value = result.closeTabSound;
+            } else {
+                document.getElementById('closeTabSound').value = 'sound2.mp3';
             }
         });
     } catch (error) {
@@ -35,14 +39,33 @@ async function loadSounds() {
 }
 
 async function fetchSoundsInFolder(folderName) {
-    // Since we can't directly list folder contents in Chrome extensions,
-    // we'll check for common sound file patterns
-    const soundFiles = [];
-    const commonFormats = ['mp3', 'wav', 'ogg', 'm4a'];
+    // Common sound files to check for
+    const commonSounds = [
+        'he_he_boi.mp3',
+        'fah.mp3',
+        'sound1.mp3',
+        'sound2.mp3',
+        'sound3.mp3',
+        'beep.mp3',
+        'bell.mp3',
+        'chime.mp3'
+    ];
     
-    // For demonstration, return a promise that resolves to an empty array
-    // Users will need to manually add their files or we can use a predefined list
-    return soundFiles;
+    // Try to fetch each sound file to see what exists
+    const foundSounds = [];
+    
+    for (const sound of commonSounds) {
+        try {
+            const response = await fetch(chrome.runtime.getURL(`sounds/${folderName}/${sound}`));
+            if (response.ok) {
+                foundSounds.push(sound);
+            }
+        } catch (e) {
+            // Sound file doesn't exist, continue
+        }
+    }
+    
+    return foundSounds;
 }
 
 function populateSelect(selectId, sounds) {
@@ -55,35 +78,29 @@ function populateSelect(selectId, sounds) {
     
     // Add sound files as options
     sounds.forEach(sound => {
-        const option = document.createElement('option');
-        option.value = sound;
-        option.textContent = sound;
-        select.appendChild(option);
+        if (sound) { // Skip empty strings
+            const option = document.createElement('option');
+            option.value = sound;
+            option.textContent = sound;
+            select.appendChild(option);
+        }
     });
-
-    // For now, show a message about adding sounds
-    if (sounds.length === 0) {
-        const option = document.createElement('option');
-        option.value = 'he_he_boi.mp3';
-        option.textContent = 'he_he_boi.mp3 (example)';
-        select.appendChild(option);
-    }
 }
 
 function saveSettings() {
-    const newTabSound = document.getElementById('newTabSound').value;
-    const closeTabSound = document.getElementById('closeTabSound').value;
+    const newTabSound = document.getElementById('newTabSound').value || 'sound1.mp3';
+    const closeTabSound = document.getElementById('closeTabSound').value || 'sound2.mp3';
 
     chrome.storage.sync.set({
         newTabSound: newTabSound,
         closeTabSound: closeTabSound
     }, () => {
         showStatus('Settings saved!', 'success');
+        console.log('Settings saved:', { newTabSound, closeTabSound });
     });
 }
 
-function playPreview(folderName) {
-    const selectId = folderName === 'new_tab_sounds' ? 'newTabSound' : 'closeTabSound';
+function playPreview(selectId) {
     const soundFile = document.getElementById(selectId).value;
 
     if (!soundFile) {
@@ -91,13 +108,28 @@ function playPreview(folderName) {
         return;
     }
 
-    const soundPath = `sounds/${folderName}/${soundFile}`;
-    const audio = new Audio(chrome.runtime.getURL(soundPath));
+    const folderPrefix = selectId === 'newTabSound' ? 'new_tab_sounds' : 'closed_tab_sounds';
+    const soundPath = `sounds/${folderPrefix}/${soundFile}`;
+    const soundUrl = chrome.runtime.getURL(soundPath);
     
-    audio.play().catch(error => {
-        console.error('Error playing preview:', error);
-        showStatus('Error playing sound', 'error');
-    });
+    console.log('Playing preview:', soundUrl);
+    
+    // Use offscreen document to play sound (same as background.js)
+    chrome.runtime.sendMessage(
+        { action: 'playSound', soundData: soundUrl },
+        (response) => {
+            if (chrome.runtime.lastError) {
+                console.error('Error sending message:', chrome.runtime.lastError);
+                showStatus('Error playing sound', 'error');
+            } else if (response && response.success) {
+                console.log('Preview played successfully');
+                showStatus('Playing preview...', 'success');
+            } else if (response && !response.success) {
+                console.error('Failed to play preview:', response.error);
+                showStatus('Error playing sound', 'error');
+            }
+        }
+    );
 }
 
 function showStatus(message, type) {

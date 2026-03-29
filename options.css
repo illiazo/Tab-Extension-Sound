@@ -34,8 +34,62 @@ h2 {
     margin-top: 0;
 }
 
+.upload-section {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.upload-label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.file-input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.file-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.upload-status {
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+}
+
+.upload-status.success {
+    color: #4CAF50;
+}
+
+.upload-status.error {
+    color: #f44336;
+}
+
 .select-wrapper {
     margin: 15px 0;
+}
+
+.select-wrapper label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
 }
 
 select {

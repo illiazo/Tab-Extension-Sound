@@ -3,7 +3,7 @@
   "name": "Tab Sound",
   "version": "1.0",
   "description": "Play sounds when tabs are opened or closed",
-  "permissions": ["tabs", "storage"],
+  "permissions": ["tabs", "storage", "offscreen"],
   "background": {
     "service_worker": "background.js"
   },
