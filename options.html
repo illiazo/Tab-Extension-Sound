@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tab Sound Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tab Sound Settings</h1>
+        
+        <div class="setting-group">
+            <h2>New Tab Sound</h2>
+            <div class="select-wrapper">
+                <select id="newTabSound">
+                    <option value="">-- Select a sound --</option>
+                </select>
+            </div>
+            <button id="playNewTab" class="play-btn">Play Preview</button>
+        </div>
+
+        <div class="setting-group">
+            <h2>Close Tab Sound</h2>
+            <div class="select-wrapper">
+                <select id="closeTabSound">
+                    <option value="">-- Select a sound --</option>
+                </select>
+            </div>
+            <button id="playCloseTab" class="play-btn">Play Preview</button>
+        </div>
+
+        <div class="status" id="status"></div>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>

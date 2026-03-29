@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Sound",
+  "version": "1.0",
+  "description": "Play sounds when tabs are opened or closed",
+  "permissions": ["tabs", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
