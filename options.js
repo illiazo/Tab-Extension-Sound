@@ -20,20 +20,10 @@ async function loadSounds() {
 
         // Load saved preferences
         chrome.storage.sync.get(['newTabSound', 'closeTabSound'], (result) => {
-            if (result.newTabSound) {
-                document.getElementById('newTabSound').value = result.newTabSound;
-            } else {
-                document.getElementById('newTabSound').value = 'sound1.mp3';
-            }
-            
-            if (result.closeTabSound) {
-                document.getElementById('closeTabSound').value = result.closeTabSound;
-            } else {
-                document.getElementById('closeTabSound').value = 'sound2.mp3';
-            }
+            document.getElementById('newTabSound').value = result.newTabSound || 'sound1.mp3';
+            document.getElementById('closeTabSound').value = result.closeTabSound || 'sound2.mp3';
         });
     } catch (error) {
-        console.error('Error loading sounds:', error);
         showStatus('Error loading sounds', 'error');
     }
 }
@@ -96,7 +86,6 @@ function saveSettings() {
         closeTabSound: closeTabSound
     }, () => {
         showStatus('Settings saved!', 'success');
-        console.log('Settings saved:', { newTabSound, closeTabSound });
     });
 }
 
@@ -112,20 +101,15 @@ function playPreview(selectId) {
     const soundPath = `sounds/${folderPrefix}/${soundFile}`;
     const soundUrl = chrome.runtime.getURL(soundPath);
     
-    console.log('Playing preview:', soundUrl);
-    
     // Use offscreen document to play sound (same as background.js)
     chrome.runtime.sendMessage(
         { action: 'playSound', soundData: soundUrl },
         (response) => {
             if (chrome.runtime.lastError) {
-                console.error('Error sending message:', chrome.runtime.lastError);
                 showStatus('Error playing sound', 'error');
             } else if (response && response.success) {
-                console.log('Preview played successfully');
                 showStatus('Playing preview...', 'success');
             } else if (response && !response.success) {
-                console.error('Failed to play preview:', response.error);
                 showStatus('Error playing sound', 'error');
             }
         }

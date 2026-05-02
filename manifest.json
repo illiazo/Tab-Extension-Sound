@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Play custom sounds when tabs open and close. Customize your browsing experience with audio notifications.",
   "author": "Illiazo",
-  "homepage_url": "https://github.com/yourusername/tab-sound-extension",
+  "homepage_url": "https://github.com/illiazo/tab-sound-extension",
   "permissions": ["tabs", "storage", "offscreen"],
   "background": {
     "service_worker": "background.js"
