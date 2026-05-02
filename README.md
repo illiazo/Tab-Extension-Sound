@@ -71,3 +71,37 @@ Tab Sound extension/
 - Audio files use relative paths from the `sounds/` directory
 - The extension uses Chrome's storage API to save your preferences
 - Preferences sync across all Chrome profiles if sync is enabled
+
+## Publishing to Chrome Web Store
+
+This extension is ready to be published to the Chrome Web Store!
+
+### For Users
+To install from the Chrome Web Store (once published):
+1. Visit the extension page on Chrome Web Store
+2. Click "Add to Chrome"
+3. Confirm the permissions
+4. Extension is installed and ready to use!
+
+### For Developers
+To publish this extension:
+
+1. **Check**: See `PUBLISHING_READY.md` for current status
+2. **Prepare**: Follow `PRE_PUBLICATION_CHECKLIST.md`
+3. **Package**: Run `bash package.sh` to create .zip file
+4. **Publish**: Follow `PUBLISH_GUIDE.md` for step-by-step instructions
+
+**Key files for publishing:**
+- `PUBLISH_GUIDE.md` - Complete publishing guide with screenshots
+- `CHROME_STORE_LISTING.md` - Store listing content
+- `PRE_PUBLICATION_CHECKLIST.md` - Quality assurance checklist
+- `PUBLISHING_READY.md` - Quick start guide
+- `package.sh` - Automated packaging script
+
+**Note**: You'll need:
+- Google Developer Account
+- $5 registration fee (one-time)
+- Icons (128x128 PNG minimum)
+- Screenshots (optional but recommended)
+
+See `PUBLISH_GUIDE.md` for detailed instructions.

@@ -3,4 +3,12 @@ node_modules/
 *.log
 .env
 dist/
-build/
+build/*.dmg
+*.pdf
+*.zip
+*.tmp
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

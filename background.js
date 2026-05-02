@@ -1,12 +1,10 @@
 // Play sound when a new tab is opened
 chrome.tabs.onCreated.addListener((tab) => {
-  console.log('🎵 New tab created:', tab.id);
   playTabSound('new');
 });
 
 // Play sound when a tab is closed
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
-  console.log('🎵 Tab closed:', tabId);
   playTabSound('close');
 });
 
